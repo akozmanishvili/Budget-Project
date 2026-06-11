@@ -6,7 +6,15 @@ const form = document.getElementById("transaction-form");
 const text = document.getElementById("text");
 const amount = document.getElementById("amount");
 const transactionList = document.getElementById(`transaction-list`);
+const balance = document.getElementById(`balance`);
 
+const addBlance = function (transactions) {
+  let sum = 0;
+  for (const amounts of transactions) {
+    sum += amounts.amountInput;
+  }
+  balance.textContent = String(sum);
+};
 //function to add transaction in transaction list
 const addTransactionDOM = function (transaction) {
   const list = document.createElement("li");
@@ -32,6 +40,7 @@ form.addEventListener("submit", function addTransaction(e) {
 
   transactions.push(transaction);
   addTransactionDOM(transaction);
+  addBlance(transactions);
   amount.value = "";
   text.value = "";
 });
