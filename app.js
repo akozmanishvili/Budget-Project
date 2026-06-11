@@ -1,5 +1,8 @@
 //to store transaction objects
-let transactions = [];
+let transactions =
+  localStorage.getItem(`transactions`) !== null
+    ? JSON.parse(localStorage.getItem(`transactions`))
+    : [];
 
 //get html elements
 const form = document.getElementById("transaction-form");
@@ -8,6 +11,7 @@ const amount = document.getElementById("amount");
 const transactionList = document.getElementById(`transaction-list`);
 const balance = document.getElementById(`balance`);
 
+//to update total balance
 const addBlance = function (transactions) {
   let sum = 0;
   for (const amounts of transactions) {
@@ -15,6 +19,7 @@ const addBlance = function (transactions) {
   }
   balance.textContent = String(sum);
 };
+
 //function to add transaction in transaction list
 const addTransactionDOM = function (transaction) {
   const list = document.createElement("li");
@@ -25,6 +30,19 @@ const addTransactionDOM = function (transaction) {
   transactionList.appendChild(list);
 };
 
+const init = function () {
+  transactionList.innerHTML = "";
+  transactions.forEach(addTransactionDOM);
+  addBlance(transactions);
+};
+
+init();
+//to remain data in local storage
+const updateLocalStorage = function () {
+  localStorage.setItem(`transactions`, JSON.stringify(transactions));
+};
+
+//listener when submitted new transaction
 form.addEventListener("submit", function addTransaction(e) {
   e.preventDefault();
   if (text.value.trim() === "" || amount.value.trim() === "") {
@@ -41,6 +59,8 @@ form.addEventListener("submit", function addTransaction(e) {
   transactions.push(transaction);
   addTransactionDOM(transaction);
   addBlance(transactions);
+  updateLocalStorage(transactions);
+
   amount.value = "";
   text.value = "";
 });
