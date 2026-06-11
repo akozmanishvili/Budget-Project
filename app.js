@@ -23,7 +23,8 @@ const addBlance = function (transactions) {
 //function to add transaction in transaction list
 const addTransactionDOM = function (transaction) {
   const list = document.createElement("li");
-  list.innerHTML = `${transaction.textInput}: <span>${transaction.amountInput > 0 ? "+$" + transaction.amountInput : "-$" + String(transaction.amountInput).slice(1)} </span>`;
+
+  list.innerHTML = `${transaction.textInput}: <span>${transaction.amountInput > 0 ? "+$" + transaction.amountInput : "-$" + String(transaction.amountInput).slice(1)} </span> <button class = 'delete-btn' onclick = 'removeTransaction(${transaction.id})  '>x</button>`;
   transaction.amountInput > 0
     ? list.classList.add("plus")
     : list.classList.add("minus");
@@ -64,3 +65,11 @@ form.addEventListener("submit", function addTransaction(e) {
   amount.value = "";
   text.value = "";
 });
+
+//removing transaction function
+const removeTransaction = function (id) {
+  transactions = transactions.filter((transaction) => transaction.id !== id);
+
+  updateLocalStorage();
+  init();
+};
